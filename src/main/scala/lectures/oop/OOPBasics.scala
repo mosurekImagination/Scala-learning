@@ -19,7 +19,7 @@ class Person(name: String, val age: Int =10) {
 
 object OOPBasics extends App {
 
-  val person = Person("tom", 15)
-  val person2 = Person("tom", 2)
+  val person = new Person("tom", 15)
+  val person2 = new Person("tom", 2)
   println(person.age)
 }
