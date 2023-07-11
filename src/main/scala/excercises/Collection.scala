@@ -1,7 +1,5 @@
 package excercises
 
-import lectures.oop.Generics.MyList
-
 abstract class MyList[+A] {
   def head(): A
 
@@ -27,7 +25,7 @@ abstract class MyList[+A] {
 
   def zipWith[B, C](otherList: MyList[B], zip: (A, B) => C): MyList[C]
 
-  def fold[B](start: B, lambda: (A, B) => B): B
+  def fold[B](start: B)(lambda: (B,A) => B): B
 
 }
 
@@ -56,7 +54,7 @@ case object Empty extends MyList[Nothing] {
 
   override def zipWith[B, C](otherList: MyList[B], zip: (Nothing, B) => C): MyList[C] = Empty
 
-  override def fold[B](start: B, lambda: (Nothing, B) => B): B = start
+  override def fold[B](start: B)(lambda: (B, Nothing) => B): B = start
 }
 
 case class ConsList[+A](h: A, t: MyList[A]) extends MyList[A] {
@@ -85,7 +83,7 @@ case class ConsList[+A](h: A, t: MyList[A]) extends MyList[A] {
     def insert(x: A, sortedList: MyList[A]): MyList[A] =
       if (sortedList.isEmpty()) new ConsList(x, Empty)
       else if (compare(x, sortedList.head()) <= 0) new ConsList(x, sortedList)
-      else new ConsList(sortedList.head(), insert(x, sortedList.tail()))
+      else ConsList(sortedList.head(), insert(x, sortedList.tail()))
 
     val sortedTail = t.sort(compare)
     insert(h, sortedTail)
@@ -93,7 +91,7 @@ case class ConsList[+A](h: A, t: MyList[A]) extends MyList[A] {
 
   override def zipWith[B, C](otherList: MyList[B], zip: (A, B) => C): MyList[C] = new ConsList[C](zip(h, otherList.head()), tail().zipWith(otherList.tail(), zip))
 
-  override def fold[B](start: B, lambda: (A, B) => B): B = tail().fold(lambda(h, start), lambda)
+  override def fold[B](start: B)(lambda: (B, A) => B): B = tail().fold(lambda(start, head()))(lambda)
 }
 
 object app extends App {
@@ -121,7 +119,7 @@ object app extends App {
   println("HOFS")
   list.forEach(print(_))
   println(list.zipWith[Int, Int](list2, _ + _).toString() == "246")
-  println(list.fold(1, (a: Int, b: Int) => a * b) == 6)
+  println(list.fold(1)((a: Int, b: Int) => a * b) == 6)
   println(list.sort((a, b) => b - a).toString() == "321")
 
 }
