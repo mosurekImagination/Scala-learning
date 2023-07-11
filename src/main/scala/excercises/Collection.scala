@@ -1,5 +1,7 @@
 package excercises
 
+import lectures.oop.Generics.MyList
+
 abstract class MyList[+A] {
   def head(): A
 
@@ -14,9 +16,19 @@ abstract class MyList[+A] {
   def map[B](transformer: A => B): MyList[B]
 
   def filter(filter: A => Boolean): MyList[A]
+
   def flatMap[B](transformer: A => MyList[B]): MyList[B]
 
   def ++[B >: A](list: MyList[B]): MyList[B]
+
+  def forEach(lambda: A => Unit): Unit
+
+  def sort(lambda: (A, A) => Int): MyList[A]
+
+  def zipWith[B, C](otherList: MyList[B], zip: (A, B) => C): MyList[C]
+
+  def fold[B](start: B, lambda: (A, B) => B): B
+
 }
 
 case object Empty extends MyList[Nothing] {
@@ -33,9 +45,18 @@ case object Empty extends MyList[Nothing] {
   override def map[B](transformer: Nothing => B): MyList[B] = Empty
 
   override def filter(filter: Nothing => Boolean): MyList[Nothing] = Empty
+
   override def flatMap[B](transformer: Nothing => MyList[B]): MyList[Nothing] = Empty
 
   override def ++[B >: Nothing](list: MyList[B]): MyList[B] = list
+
+  override def forEach(lambda: Nothing => Unit): Unit = Unit
+
+  override def sort(lambda: (Nothing, Nothing) => Int): MyList[Nothing] = Empty
+
+  override def zipWith[B, C](otherList: MyList[B], zip: (Nothing, B) => C): MyList[C] = Empty
+
+  override def fold[B](start: B, lambda: (Nothing, B) => B): B = start
 }
 
 case class ConsList[+A](h: A, t: MyList[A]) extends MyList[A] {
@@ -50,9 +71,29 @@ case class ConsList[+A](h: A, t: MyList[A]) extends MyList[A] {
   override def map[B](transformer: A => B): MyList[B] = new ConsList(transformer(h), t.map(transformer))
 
   override def filter(predicate: A => Boolean): MyList[A] = if (predicate(h)) new ConsList(h, t.filter(predicate)) else t.filter(predicate)
+
   override def ++[B >: A](list: MyList[B]): MyList[B] = new ConsList(h, t ++ list)
 
   override def flatMap[B](transformer: A => MyList[B]): MyList[B] = transformer(head()) ++ tail().flatMap(transformer)
+
+  override def forEach(lambda: A => Unit): Unit = {
+    lambda(h)
+    tail().forEach(lambda)
+  }
+
+  override def sort(compare: (A, A) => Int): MyList[A] = {
+    def insert(x: A, sortedList: MyList[A]): MyList[A] =
+      if (sortedList.isEmpty()) new ConsList(x, Empty)
+      else if (compare(x, sortedList.head()) <= 0) new ConsList(x, sortedList)
+      else new ConsList(sortedList.head(), insert(x, sortedList.tail()))
+
+    val sortedTail = t.sort(compare)
+    insert(h, sortedTail)
+  }
+
+  override def zipWith[B, C](otherList: MyList[B], zip: (A, B) => C): MyList[C] = new ConsList[C](zip(h, otherList.head()), tail().zipWith(otherList.tail(), zip))
+
+  override def fold[B](start: B, lambda: (A, B) => B): B = tail().fold(lambda(h, start), lambda)
 }
 
 object app extends App {
@@ -61,7 +102,7 @@ object app extends App {
 
   // nothing
   println(new ConsList(1, Empty).tail() == Empty)
-  println(Empty.map( "D") == Empty)
+  println(Empty.map("D") == Empty)
 
   //list
   println(list.head() == 1)
@@ -74,6 +115,13 @@ object app extends App {
   //higher order functions
   println(list.map(_ * 2).toString() == "246")
   println(list.filter(_ % 2 == 0).toString() == "2")
-  println(list.flatMap(elem => new ConsList(elem, new ConsList(elem+1, Empty))).toString() == "122334")
+  println(list.flatMap(elem => new ConsList(elem, new ConsList(elem + 1, Empty))).toString() == "122334")
+
+  //HOFs
+  println("HOFS")
+  list.forEach(print(_))
+  println(list.zipWith[Int, Int](list2, _ + _).toString() == "246")
+  println(list.fold(1, (a: Int, b: Int) => a * b) == 6)
+  println(list.sort((a, b) => b - a).toString() == "321")
 
 }
