@@ -122,4 +122,11 @@ object app extends App {
   println(list.fold(1)((a: Int, b: Int) => a * b) == 6)
   println(list.sort((a, b) => b - a).toString() == "321")
 
+
+  //it works for our custom collection as we have implemented map,filter, flatmap functions
+  val values = for {
+    x <- list
+  } yield (x * 2)
+  println(values)
+
 }
