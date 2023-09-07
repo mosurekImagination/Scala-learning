@@ -1,4 +1,4 @@
-package advanced
+package advanced.base
 
 object AdvancedPM extends App {
 
