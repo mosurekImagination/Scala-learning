@@ -1,0 +1,21 @@
+Akka has a thread pool that it shares with actors
+Each actor has message handler and message queue(mailbox).
+Actor by definition is passive - it needs a thread to run.
+
+We can have thousands of actors per few threads.
+Akka scheduels thread for actors.
+
+Message is enqueued in the actor's mailbox in thread-safe way
+Messages are extracted from the mailbox in order
+The thread invokes the handler on each message
+
+Guarantees:
+- only one thread operates on an actor at any time
+    - actors are effectively single-threaded
+    - no locks needed
+    - processing messaging is atomic
+- Message delivery guarantees
+    - at most once delivery
+    - for any sender-receiver pair, the message order is maintained
+
+    - no duplicates, in order
