@@ -1,0 +1,41 @@
+Akka has a thread pool that it shares with actors
+Each actor has message handler and message queue(mailbox).
+Actor by definition is passive - it needs a thread to run.
+
+We can have thousands of actors per few threads.
+Akka scheduels thread for actors.
+
+Message is enqueued in the actor's mailbox in thread-safe way
+Messages are extracted from the mailbox in order
+The thread invokes the handler on each message
+
+Guarantees:
+- only one thread operates on an actor at any time
+    - actors are effectively single-threaded
+    - no locks needed
+    - processing messaging is atomic
+- Message delivery guarantees
+    - at most once delivery
+    - for any sender-receiver pair, the message order is maintained
+    - no duplicates, in order
+
+
+Akka recap
+- mesages are sent asynchrously
+- many actors (in the miliseconds) can share a few dozen threads
+- each message is processed/handled atomically
+- no need for locks
+- actor can spawn child actors
+- guardians: /system, /user, / = root guardian
+
+- actors have a defined lifecycle: started, stopped, suspended, resumed, restarted with hooks
+- stopping actors context.stop, poisonPill, Kill
+- Actor logging
+
+- supervision defines how parent actor will act in case of child failure
+
+- We can configure akka infrastructure: dispatchers, routers, mailboxes
+
+- We have schedulers in scope of akka cluster
+
+- Akka patterns including Finite State Machine and ask pattern (pipeTo)

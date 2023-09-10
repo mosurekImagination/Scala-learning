@@ -1,7 +1,7 @@
 package testing
 
 import akka.actor.{Actor, ActorSystem, Props}
-import akka.actors.ActorIntro2.SimpleActor
+import akka.introduction.actors.ActorIntro2.SimpleActor
 import akka.testkit.TestActors.{BlackholeActor, EchoActor}
 import akka.testkit.{ImplicitSender, TestKit}
 import org.scalatest.BeforeAndAfterAll

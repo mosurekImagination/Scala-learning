@@ -1,4 +1,4 @@
-package akka.patten
+package akka.introduction.patten
 
 import akka.actor.{Actor, ActorLogging, ActorRef, ActorSystem, Cancellable, FSM, Props}
 import akka.pattern.ask

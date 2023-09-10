@@ -1,8 +1,8 @@
-package akka.infra
+package akka.introduction.infra
 
 import akka.actor.{ActorSystem, Props}
 import akka.dispatch.{ControlMessage, PriorityGenerator, UnboundedPriorityMailbox}
-import akka.infra.Schedulers.EchoActor
+import Schedulers.EchoActor
 import com.typesafe.config.{Config, ConfigFactory}
 
 object Dispatchers extends App {

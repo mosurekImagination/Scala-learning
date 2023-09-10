@@ -1,4 +1,4 @@
-package akka.playground
+package akka.introduction.playground
 
 import akka.actor.ActorSystem
 

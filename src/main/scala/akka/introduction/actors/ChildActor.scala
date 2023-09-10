@@ -1,7 +1,7 @@
-package akka.actors
+package akka.introduction.actors
 
 import akka.actor.{Actor, ActorLogging, ActorRef, ActorSystem, Props}
-import akka.actors.ChildActor.WordCounterMaster.{Initialize, WordCountReply, WordCountTask}
+import ChildActor.WordCounterMaster.{Initialize, WordCountReply, WordCountTask}
 import akka.event.Logging
 
 object ChildActor extends App {

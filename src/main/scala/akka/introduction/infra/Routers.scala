@@ -1,7 +1,8 @@
-package akka.infra
+package akka.introduction.infra
 
 import akka.actor.{Actor, ActorLogging, ActorRef, ActorSystem, Props, Terminated}
-import akka.infra.Schedulers.EchoActor
+import akka.introduction.infra.Schedulers.EchoActor
+import Schedulers.EchoActor
 import akka.routing.{ActorRefRoutee, Broadcast, FromConfig, RoundRobinGroup, RoundRobinPool, RoundRobinRoutingLogic, Router}
 
 

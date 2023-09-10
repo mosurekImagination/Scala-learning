@@ -1,4 +1,4 @@
-package akka.faulttolerance
+package akka.introduction.faulttolerance
 
 import akka.actor.SupervisorStrategy.Restart
 import akka.actor.{Actor, ActorRef, ActorSystem, AllForOneStrategy, Kill, OneForOneStrategy, PoisonPill, Props, SupervisorStrategy}

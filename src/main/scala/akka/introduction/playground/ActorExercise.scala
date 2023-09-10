@@ -1,7 +1,7 @@
-package akka.playground
+package akka.introduction.playground
 
 import akka.actor.{Actor, ActorRef, ActorSystem, Props}
-import akka.playground.ActorExercise.Counter.{Decrement, Increment, Print}
+import ActorExercise.Counter.{Decrement, Increment, Print}
 
 object ActorExercise extends App {
 

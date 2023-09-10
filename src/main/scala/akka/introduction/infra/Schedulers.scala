@@ -1,4 +1,4 @@
-package akka.infra
+package akka.introduction.infra
 
 import akka.actor.{Actor, ActorLogging, ActorSystem, Props, Timers}
 
