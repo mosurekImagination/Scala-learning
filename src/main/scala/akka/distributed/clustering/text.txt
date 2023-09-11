@@ -1,0 +1,59 @@
+Clustering
+- build distributed applications
+- decentralized, peer-to-peer
+- no single point of failure
+- automatic node membership and gossip protocol
+- failure detector
+
+Clustering is based on Remoting
+- in most cases, use clustering instead of remoting
+
+Cluster:
+- composed of member nodes
+- node = host + port + UUID
+
+Cluster membership:
+- convergent gossip protocol
+- Phi accrual failure detector - same as Remoting
+- no leader election - leader is deterministically chosen
+
+Joining a cluster:
+- contact seed nodes in order(from configuration)
+    - if you are first seed node, just join
+    - send a join command to the seed node that responds first
+- node is in the "joining" state
+    - wait for gossip to converge
+    - all nodes in the cluster must acknowledge the new node
+- the leader will set the state of the new node to "up"
+
+Leave a cluster
+- safe and quiet
+    - node switches it state to "Leaving"
+    - gossip converges
+    - leader sets the state to "Exiting"
+    - gossip converges
+    - leader marks it as removed
+- the hard way (JVM crashed or network issues)
+    - a node becomes unreachable
+    - gossip convergence and leader actions are not possible
+    - must be removed (downed) manually
+    - can also be auto-downed by the leader
+
+DO NOT use automatic downing in production
+
+Where to use clustering?
+In distributed application
+- tightly coupled
+- easier codebase, especially when staring out
+- single artifacts
+- all the benefits of clustering: availability, fault tolerance etc.
+
+Within microservices
+- nodes in a service are tightly coupled
+- the service has the benefirs of clustering: availability, fault tolerance etc.
+- the microservices can be loosely coupled with each other
+
+When NOT to use clustering
+- for inter-microservice communicate
+- services are separated, different artifacts, but tightly coupled
+- distributed monolith

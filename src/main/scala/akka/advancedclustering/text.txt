@@ -1,0 +1,48 @@
+Cluster singleton
+- single instance of an actor running in the cluster
+
+How to use it?
+- Start the singleton: ClusterSingletonManager
+    - ensures deployment of the singleton
+    - guarantees single instance per cluster
+    - is started as early as possible, on every node
+The actual actor
+    - is a child of ClusterSingletonManager
+    - runs on the oldest running node
+    - is moved to a new oldest running node, if the current one leaves (handover)
+Talk to the singleton: ClusterSingletonProxy
+    - knows where the singleton actually is
+    - serves as a mediator to the singleton actor
+    - buffers incoming messages during singleton handover
+
+
+Cluster Sharding
+- split a big actor into smaller actors of the same type in the cluster
+
+How it works?
+We split an actor A in multiple smaller actors
+- same type A
+- potentially multiple instances on the same node
+- an instance of A = entity, and it has an ID
+
+Every node starts Cluster Sharding for an actor type
+- every node starts a special shard region actor
+- every shard region is responsible for a shard ID
+- a special shard coordinator starts as a cluster singleton
+
+Every message
+- is sent to the Shard region of the local node
+- the local shard region will map the message to a shard id and an entity id
+- the local shard region will ask the shard coordinator for the destination node
+ the shard region will forward the message to the correct node and entity
+
+Sharding extras
+Shard rebalancing
+- if a shard has too many entities, the entities can be migrated to other nodes
+- during handover, messages for a shard are buffered
+- the state of the entities is not migrated
+Shard passivation
+- if an entity is passive for a while, best to stop it to free its memory
+- entity sends Passivate message to its parent ShardRegion
+- ShardRegion stops the entity
+- ShardRegion creates new entity when needed

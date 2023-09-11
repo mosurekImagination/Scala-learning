@@ -13,6 +13,9 @@ val cassandraVersion = "1.1.1"
 val json4sVersion = "3.2.11"
 val protobufVersion = "3.6.1"
 
+resolvers += "Akka library repository".at("https://repo.akka.io/maven")
+
+
 libraryDependencies ++= Seq(
   "com.typesafe.akka" %% "akka-actor" % akkaVersion,
   "com.typesafe.akka" %% "akka-testkit" % akkaVersion,
@@ -32,7 +35,16 @@ libraryDependencies ++= Seq(
   "com.typesafe.akka" %% "akka-persistence-cassandra-launcher" % cassandraVersion % Test,
 
   // google protocol buffers
-  "com.google.protobuf" % "protobuf-java" % protobufVersion
-  ,
+  "com.google.protobuf" % "protobuf-java" % protobufVersion,
+
+  //remoting and clustering
+  "com.typesafe.akka" %% "akka-remote" % akkaVersion,
+  "com.typesafe.akka" %% "akka-cluster" % akkaVersion,
+  "com.typesafe.akka" %% "akka-cluster-sharding" % akkaVersion,
+  "com.typesafe.akka" %% "akka-cluster-tools" % akkaVersion,
+
+
+  "io.aeron" % "aeron-driver" % "1.40.0",
+  "io.aeron" % "aeron-client" % "1.40.0"
 
 )
