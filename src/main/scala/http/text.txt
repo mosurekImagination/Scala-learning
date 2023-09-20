@@ -1,0 +1,32 @@
+Akka HTTP is
+- a suite of libraries
+- focues on HTTP integration of an application
+- designed for both servers and clients
+- based on Akka actors and Akka Streams
+
+Akka HTTPS is NOT:
+- a framework
+
+Akka HTTP strengths:
+- stream-based, with backpressure for free
+- multiple API levels for control vs ease of use
+
+Core Concepts:
+- HttpRequest, HttpResponse
+- HttpEntity
+- marshalling
+
+===
+receive HTTP request, send HTTP response
+- synchronously via a function HttpRequest => HttpResponse
+- async via a function HttpRequest => Future[HttpResponse]
+- async via streams, with a Flow[HttpRequest, HttpResponse, _]
+
+all of the above turn into flows sooner or later
+
+Under the hood:
+- the server receives HttpRequests (transparently)
+- the requests go through the flow we write
+- the resulting responses are served back (transparently)
+
+

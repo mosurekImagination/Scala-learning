@@ -5,6 +5,7 @@ version := "0.1"
 scalaVersion := "3.3.0"
 
 val akkaVersion = "2.7.0"
+val akkaHttpVersion = "10.5.2"
 //db
 val leveldbVersion = "0.7"
 val leveldbjniVersion = "1.8"
@@ -45,6 +46,15 @@ libraryDependencies ++= Seq(
 
 
   "io.aeron" % "aeron-driver" % "1.40.0",
-  "io.aeron" % "aeron-client" % "1.40.0"
+  "io.aeron" % "aeron-client" % "1.40.0",
+
+
+  //http - microservices
+  "com.typesafe.akka" %% "akka-http" % akkaHttpVersion,
+  "com.typesafe.akka" %% "akka-http-spray-json" % akkaHttpVersion,
+  "com.typesafe.akka" %% "akka-http-testkit" % akkaHttpVersion,
+  "com.typesafe.akka" %% "akka-stream" % akkaVersion,
+  "ch.qos.logback" % "logback-classic" % "1.2.3",
+
 
 )
